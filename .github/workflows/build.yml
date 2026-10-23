@@ -1,0 +1,28 @@
+name: Build plugin
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unzip project
+        run: unzip -o bigenderchest.zip -d build
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Build with Maven
+        run: mvn -B -f build/pom.xml package
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: BigEnderChest
+          path: build/target/BigEnderChest.jar
+          
